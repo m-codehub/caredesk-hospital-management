@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Sign in{% endblock %}
+{% block public_content %}
+<main class="login-shell">
+  <section class="login-panel">
+    <a class="brand" href="{{ url_for('login') }}"><span class="brand-mark">+</span>CareDesk</a>
+    <p class="eyebrow">HOSPITAL MANAGEMENT</p>
+    <h1>Welcome back.</h1>
+    <p class="login-intro">Sign in to your demo workspace.</p>
+    {% for category, message in get_flashed_messages(with_categories=true) %}<p class="flash {{ category }}" role="alert">{{ message }}</p>{% endfor %}
+    <form method="post" class="login-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <label>Username<input name="username" autocomplete="username" required autofocus /></label>
+      <label>Password<input name="password" type="password" autocomplete="current-password" required /></label>
+      <button class="button button-green" type="submit">Sign in <span>↗</span></button>
+    </form>
+    <div class="demo-logins"><strong>Demo accounts</strong><p>Admin: <code>admin</code> / <code>admin123</code></p><p>Doctor: <code>doctor</code> / <code>doctor123</code></p><p>Reception: <code>reception</code> / <code>reception123</code></p><p>Patient: <code>patient</code> / <code>patient123</code></p></div>
+    <p class="privacy-note">Demo only. Never use real patient information.</p>
+  </section>
+</main>
+{% endblock %}

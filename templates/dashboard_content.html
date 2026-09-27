@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="welcome-row"><div><h2>Hospital overview</h2><p>A quick look at today’s activity.</p></div><span class="date-chip">{{ appointments|length }} upcoming visits</span></section>
+<section class="stats-grid" aria-label="Hospital summary">
+  {% if g.user.role != 'patient' %}<article class="stat-card"><span class="stat-symbol coral">P</span><div><p>Patients</p><strong>{{ counts.patients }}</strong></div></article>{% endif %}
+  {% if g.user.role in ['admin', 'receptionist'] %}<article class="stat-card"><span class="stat-symbol blue">D</span><div><p>Doctors</p><strong>{{ counts.doctors }}</strong></div></article>{% endif %}
+  <article class="stat-card"><span class="stat-symbol yellow">+</span><div><p>Appointments</p><strong>{{ counts.appointments }}</strong></div></article>
+  {% if g.user.role in ['admin', 'receptionist'] %}<article class="stat-card"><span class="stat-symbol green">B</span><div><p>Available beds</p><strong>{{ counts.beds_available }}</strong></div></article>{% endif %}
+</section>
+<section class="panel table-panel"><div class="panel-heading"><div><p class="eyebrow">SCHEDULE</p><h2>Upcoming appointments</h2></div><a class="text-link" href="{{ url_for('module', module_key='appointments') }}">View all</a></div>
+  <div class="table-wrap"><table><thead><tr><th>Date</th><th>Time</th><th>Patient</th><th>Doctor</th><th>Reason</th><th>Status</th></tr></thead><tbody>
+  {% for appointment in appointments %}<tr><td>{{ appointment.visit_date }}</td><td>{{ appointment.visit_time }}</td><td>{{ appointment.patient }}</td><td>{{ appointment.doctor }}</td><td>{{ appointment.reason }}</td><td><span class="status-pill">{{ appointment.status }}</span></td></tr>{% else %}<tr><td class="empty-row" colspan="6">No upcoming appointments.</td></tr>{% endfor %}
+  </tbody></table></div>
+</section>
+{% endblock %}

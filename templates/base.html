@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f6f2" />
+    <title>{% block title %}CareDesk{% endblock %} | Hospital Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body>
+    {% if g.user %}
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">+</span>CareDesk</a>
+        <p class="side-caption">HOSPITAL MANAGEMENT</p>
+        <nav aria-label="Main navigation">
+          <a class="nav-link" href="{{ url_for('dashboard') }}">Overview</a>
+          {% for module_key in navigation[g.user.role] %}
+          <a class="nav-link" href="{{ url_for('module', module_key=module_key) }}">{{ module_titles[module_key] }}</a>
+          {% endfor %}
+          {% if g.user.role in ['admin', 'doctor'] %}<a class="nav-link" href="{{ url_for('reports') }}">Reports</a>{% endif %}
+        </nav>
+        <div class="account-box"><span class="account-avatar">{{ g.user.username[0]|upper }}</span><div><strong>{{ g.user.username }}</strong><small>{{ g.user.role|title }}</small></div></div>
+        <form action="{{ url_for('logout') }}" method="post" class="logout-form">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <button class="logout-button" type="submit">Sign out</button>
+        </form>
+      </aside>
+      <main class="main-panel">
+        <header class="topbar"><div><p class="eyebrow">CAREDESK / {{ g.user.role|upper }}</p><h1>{% block heading %}Hospital overview{% endblock %}</h1></div><span class="local-badge"><span></span> Local demo</span></header>
+        <div class="content">
+          {% for category, message in get_flashed_messages(with_categories=true) %}<p class="flash {{ category }}" role="status">{{ message }}</p>{% endfor %}
+          {% block content %}{% endblock %}
+          <p class="privacy-note">Student demo only. Do not enter real patient information.</p>
+        </div>
+      </main>
+    </div>
+    {% else %}
+      {% block public_content %}{% endblock %}
+    {% endif %}
+  </body>
+</html>

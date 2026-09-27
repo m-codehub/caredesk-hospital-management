@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Edit {{ config.title }}{% endblock %}
+{% block heading %}Edit {{ config.title }}{% endblock %}
+{% block content %}
+<section class="panel edit-panel">
+  <div class="panel-heading"><div><p class="eyebrow">UPDATE RECORD</p><h2>{{ config.title }}</h2></div><a class="text-link" href="{{ url_for('module', module_key=module_key) }}">Back to {{ config.title|lower }}</a></div>
+  {% for category, message in get_flashed_messages(with_categories=true) %}<p class="flash {{ category }}" role="status">{{ message }}</p>{% endfor %}
+  <form method="post" class="record-form edit-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    {% for field, label, kind in config.fields %}{% if not (g.user.role == 'doctor' and field == 'doctor_id') %}<label>{{ label }}
+      {% if kind.startswith('ref:') %}<select name="{{ field }}" {% if not (module_key == 'beds' and field == 'patient_id') %}required{% endif %}><option value="">Unassigned</option>{% for option in reference_options.get(field, []) %}<option value="{{ option.id }}" {% if record[field]|string == option.id|string %}selected{% endif %}>{{ option.name }}</option>{% endfor %}</select>
+      {% elif kind.startswith('select:') %}<select name="{{ field }}" required>{% for option in kind.split(':', 1)[1].split(',') %}<option {% if record[field] == option %}selected{% endif %}>{{ option }}</option>{% endfor %}</select>
+      {% else %}<input name="{{ field }}" type="{{ kind }}" value="{{ record[field] if record[field] is not none else '' }}" {% if kind == 'number' %}min="0"{% endif %} required />{% endif %}
+    </label>{% endif %}{% endfor %}
+    <button class="button button-green" type="submit">Save changes <span>↗</span></button>
+  </form>
+</section>
+{% endblock %}

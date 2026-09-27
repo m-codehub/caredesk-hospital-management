@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hospital Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">+</div>
+          <div>
+            <div class="brand-name">CareSync</div>
+            <div class="brand-subtitle">Hospital Ops</div>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <button class="nav-item active">Dashboard</button>
+          <button class="nav-item">Patients</button>
+          <button class="nav-item">Appointments</button>
+          <button class="nav-item">Billing</button>
+          <button class="nav-item">Reports</button>
+        </nav>
+
+        <div class="team-card">
+          <div class="mini-label">On duty</div>
+          <div class="team-row">
+            <span class="avatar teal">DR</span>
+            <div>
+              <strong>Dr. Patel</strong>
+              <small>Cardiology</small>
+            </div>
+          </div>
+          <div class="team-row">
+            <span class="avatar blue">RN</span>
+            <div>
+              <strong>Maria Lee</strong>
+              <small>Ward Nurse</small>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Operations overview</p>
+            <h1>Hospital Dashboard</h1>
+          </div>
+          <div class="header-actions">
+            <button class="secondary-btn">Create appointment</button>
+            <button class="primary-btn">Add patient</button>
+          </div>
+        </header>
+
+        <section class="stats-grid" id="statsGrid"></section>
+
+        <section class="content-grid">
+          <div class="panel wide">
+            <div class="panel-header">
+              <div>
+                <div class="mini-label">Capacity</div>
+                <h2>Department overview</h2>
+              </div>
+              <button class="ghost-btn">View analytics</button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Department</th>
+                  <th>Scheduled Visits</th>
+                  <th>Occupancy</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="deptTable"></tbody>
+            </table>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <div class="mini-label">Today</div>
+                <h2>Quick actions</h2>
+              </div>
+            </div>
+            <div class="quick-actions">
+              <button>Create appointment</button>
+              <button>Add patient</button>
+              <button>View billing</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel lower-panel">
+          <div class="panel-header">
+            <div>
+              <div class="mini-label">Patients</div>
+              <h2>Recent patient records</h2>
+            </div>
+            <button class="ghost-btn">Manage records</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Doctor</th>
+                <th>Last Visit</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="patientTable"></tbody>
+          </table>
+        </section>
+
+        <section class="panel lower-panel">
+          <div class="panel-header">
+            <div>
+              <div class="mini-label">Appointments</div>
+              <h2>Upcoming visits</h2>
+            </div>
+            <button class="ghost-btn">Schedule visit</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Patient</th>
+                <th>Doctor</th>
+                <th>Time</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="appointmentTable"></tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

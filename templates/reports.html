@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block heading %}Reports & analytics{% endblock %}
+{% block content %}
+<section class="stats-grid">{% if bill_total is not none %}<article class="stat-card"><span class="stat-symbol coral">$</span><div><p>Total billed</p><strong>${{ '%.2f'|format(bill_total) }}</strong></div></article>{% endif %}<article class="stat-card"><span class="stat-symbol green">D</span><div><p>Departments</p><strong>{{ department_rows|length }}</strong></div></article></section>
+<section class="panel table-panel"><div class="panel-heading"><div><p class="eyebrow">PATIENT DISTRIBUTION</p><h2>Patients by department</h2></div></div><div class="table-wrap"><table><thead><tr><th>Department</th><th>Patients</th></tr></thead><tbody>{% for row in department_rows %}<tr><td>{{ row.department }}</td><td>{{ row.patients }}</td></tr>{% else %}<tr><td colspan="2" class="empty-row">No departments yet.</td></tr>{% endfor %}</tbody></table></div></section>
+{% endblock %}

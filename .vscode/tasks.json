@@ -1,0 +1,45 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Hospital Management",
+      "type": "process",
+      "command": "python",
+      "args": ["app.py"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "runOptions": {
+        "instanceLimit": 1
+      },
+      "problemMatcher": {
+        "owner": "hospital-management",
+        "pattern": [{ "regexp": ".*" }],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": ".*Running on http://127.0.0.1:5000.*"
+        }
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Run Hospital Management Tests",
+      "type": "process",
+      "command": "python",
+      "args": ["-m", "unittest", "discover", "-s", "tests", "-v"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    }
+  ]
+}

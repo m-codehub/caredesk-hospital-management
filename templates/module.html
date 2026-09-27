@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ config.title }}{% endblock %}
+{% block heading %}{{ config.title }}{% endblock %}
+{% block content %}
+<section class="panel module-panel">
+  <div class="panel-heading"><div><p class="eyebrow">RECORDS</p><h2>{{ config.title }}</h2></div><span class="date-chip">{{ rows|length }} shown</span></div>
+  {% if can_edit or can_book %}
+  <details class="add-record"><summary class="button button-green">{% if can_book %}Book an appointment{% else %}Add {{ config.title|lower }} record{% endif %} <span>+</span></summary>
+    <form method="post" class="record-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      {% for field, label, kind in config.fields %}{% if not (can_book and field in ['patient_id', 'status']) and not (g.user.role == 'doctor' and field == 'doctor_id') %}<label>{{ label }}
+        {% if kind.startswith('ref:') %}<select name="{{ field }}" {% if not (module_key == 'beds' and field == 'patient_id') %}required{% endif %}><option value="">{% if module_key == 'beds' and field == 'patient_id' %}Unassigned{% else %}Choose {{ label|lower }}{% endif %}</option>{% for option in reference_options.get(field, []) %}<option value="{{ option.id }}">{{ option.name }}</option>{% endfor %}</select>
+        {% elif kind.startswith('select:') %}<select name="{{ field }}" required><option value="">Choose {{ label|lower }}</option>{% for option in kind.split(':', 1)[1].split(',') %}<option>{{ option }}</option>{% endfor %}</select>
+        {% else %}<input name="{{ field }}" type="{{ kind }}" {% if kind == 'number' %}min="0"{% endif %} required />{% endif %}
+      </label>{% endif %}{% endfor %}
+      <button class="button button-dark" type="submit">{% if can_book %}Request appointment{% else %}Save record{% endif %} <span>↗</span></button>
+    </form>
+  </details>
+  {% endif %}
+  {% if can_pay %}<p class="payment-note">Choose Pay on an unpaid bill to mark it paid in this demo. No real payment is processed.</p>{% endif %}
+  <div class="table-wrap"><table><thead><tr>{% for field, label in config.columns.items() %}<th>{{ label }}</th>{% endfor %}{% if can_edit or can_pay %}<th></th>{% endif %}</tr></thead><tbody>
+    {% for row in rows %}<tr>{% for field in config.columns %}<td>{{ row[field] if row[field] is not none else '—' }}</td>{% endfor %}
+      {% if can_edit %}<td class="row-actions"><a class="edit-link" href="{{ url_for('edit_record', module_key=module_key, record_id=row.id) }}">Edit</a><form method="post" action="{{ url_for('delete_record', module_key=module_key, record_id=row.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}" /><button class="remove-button" type="submit">Remove</button></form></td>{% endif %}
+      {% if can_pay %}<td>{% if row.status != 'Paid' %}<form method="post" action="{{ url_for('pay_bill', record_id=row.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}" /><button class="pay-button" type="submit">Pay</button></form>{% else %}<span class="status-pill">Paid</span>{% endif %}</td>{% endif %}
+    </tr>{% else %}<tr><td class="empty-row" colspan="{{ config.columns|length + (1 if can_edit or can_pay else 0) }}">No {{ config.title|lower }} records found.</td></tr>{% endfor %}
+  </tbody></table></div>
+</section>
+{% endblock %}
